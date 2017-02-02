@@ -1,32 +1,40 @@
-let noise = (x, y, z) => {
+let noise = (x, y, seed) => {
   let X = Math.floor(x) & 255;
   let Y = Math.floor(y) & 255;
-  let Z = Math.floor(z) & 255;
+  let Seed = Math.floor(seed) & 255;
 
   x -= Math.floor(x);
   y -= Math.floor(y);
-  z -= Math.floor(z);
+  seed -= Math.floor(seed);
 
   let u = fade(x);
   let v = fade(y);
-  let w = fade(z);
+  let w = fade(seed);
 
   let A = p[X] + Y;
-  let AA = p[A]+Z;
-  let AB = p[A+1]+Z;
+  let AA = p[A]+Seed;
+  let AB = p[A+1]+Seed;
 
   let B = p[X+1]+Y;
-  let BA = p[B]+Z;
-  let BB = p[B+1]+Z;
+  let BA = p[B]+Seed;
+  let BB = p[B+1]+Seed;
 
-  return lerp(w,
-          lerp(v,
-              lerp(u, grad(p[AA], x, y, z), grad(p[BA], x-1, y, z)),
-              lerp(u, grad(p[AB], x, y-1, z), grad(p[BB], x-1, y-1, z))
+  return linInterp(w,
+          linInterp(v,
+              linInterp(u,
+                  gradient(p[AA], x, y, seed),
+                  gradient(p[BA], x-1, y, seed)),
+              linInterp(u,
+                  gradient(p[AB], x, y-1, seed),
+                  gradient(p[BB], x-1, y-1, seed))
               ),
-          lerp(v,
-              lerp(u, grad(p[AA+1], x, y, z-1), grad(p[BA+1], x-1, y, z-1)),
-              lerp(u, grad(p[AB+1], x, y-1, z-1), grad(p[BB+1], x-1, y-1, z-1))
+          linInterp(v,
+              linInterp(u,
+                  gradient(p[AA+1], x, y, seed-1),
+                  gradient(p[BA+1], x-1, y, seed-1)),
+              linInterp(u,
+                  gradient(p[AB+1], x, y-1, seed-1),
+                  gradient(p[BB+1], x-1, y-1, seed-1))
               )
           );
 }
@@ -35,14 +43,14 @@ let fade = (t) => {
   return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
-let lerp = (t, a, b) => {
+let linInterp = (t, a, b) => {
   return a + t * (b - a);
 }
 
-let grad = (hash, x, y, z) => {
+let gradient = (hash, x, y, seed) => {
   let h = hash & 15;
   let u = h<8 ? x : y;
-  let v = h<4 ? y : h==12 || h==14 ? x : z;
+  let v = h<4 ? y : h==12 || h==14 ? x : seed;
 
   return ((h&1) == 0 ? u : -u) + ((h&2) == 0 ? v : -v);
 }

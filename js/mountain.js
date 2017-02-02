@@ -6,6 +6,11 @@ class Mountain {
     this._widthSeg = widthSeg;
     this._heightSeg = heightSeg;
 
+    // let colors = [new THREE.Color(0x4286f4),
+    //               new THREE.Color(0x89f442),
+    //               new THREE.Color(0xd942f4)];
+
+    this._material = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors});
     this._geometry = new THREE.PlaneGeometry(
         this._width, this._height, this._widthSeg, this._heightSeg);
     this._seed = Math.floor(Math.random() * 200);
@@ -17,20 +22,23 @@ class Mountain {
           this._geometry.vertices[i].y / 256.0,
           this._seed) * (dist / 6.5);
       this._geometry.vertices[i].z = h;
+      let color = new THREE.Color(0xffffff);
+      color.r = Math.max(0, Math.min (255, 100 + h / 3)) / 255;
+      color.g = 72 / 255;
+      color.b = 26 / 255;
+      this._geometry.colors[i] = color;
     }
 
-    //this._material = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors});
+    let faceIndices = ['a','b','c','d'];
+
     for (let i = 0; i < this._geometry.faces.length; i++) {
-      this._geometry.faces[i].vertexColors[0] = new THREE.Color(0x4286f4);
-      this._geometry.faces[i].vertexColors[1] = new THREE.Color(0x89f442);
-      this._geometry.faces[i].vertexColors[2] = new THREE.Color(0xd942f4);
+      let face = this._geometry.faces[i];
+      let numberOfSides = ( face instanceof THREE.Face3 ) ? 3 : 4;
+      for (let j = 0; j < numberOfSides; j++) {
+        let vertexIndex = face[ faceIndices[j] ];
+        face.vertexColors[j] = this._geometry.colors[vertexIndex];
+      }
     }
-    // console.log(materials);
-
-    this._material = new THREE.MeshPhongMaterial({
-      color: 0x7c5231,
-      wireframe: true
-    });
     this._mesh = new THREE.Mesh(this._geometry, this._material);
   }
 
