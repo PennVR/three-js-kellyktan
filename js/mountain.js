@@ -30,7 +30,6 @@ class Mountain {
     }
 
     let faceIndices = ['a','b','c','d'];
-
     for (let i = 0; i < this._geometry.faces.length; i++) {
       let face = this._geometry.faces[i];
       let numberOfSides = ( face instanceof THREE.Face3 ) ? 3 : 4;

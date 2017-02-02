@@ -30,25 +30,23 @@ if (navigator.getVRDisplays) {
 let mountain = new Mountain(7500, 7500, 256, 256);
 scene.add(mountain.mesh);
 
-// let sGeometry = new THREE.SphereGeometry( .1, 32, 32 );
-// let sMaterial = new MeshPhongMaterial( { color: 0xffffff })
-// let lt = new THREE.PointLight();
-// scene.add(sphere);
-// scene.add(lt);
+let sGeometry = new THREE.SphereGeometry( 10, 32, 32 );
+let sMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+let sMesh = new THREE.Mesh(sGeometry, sMaterial);
+scene.add(sMesh);
 
-// lt.position.z = 700;
-// lt.position.y = 500;
-// sphere.position.z = 700;
-// sphere.position.y = 500;
+sMesh.position.z = -500;
+sMesh.position.y = 2000;
 
 camera.position.z = 700;
 camera.position.y = -0;
-camera.rotation.x = 1.2;
+camera.rotation.x = 1.4;
 
 let animate = () => {
   effect.requestAnimationFrame(animate);
-  render();
+  sMesh.position.z +=5;
+  effect.render(scene, camera);
 }
 
 controls.update();
-effect.render(scene, camera);
+animate();
