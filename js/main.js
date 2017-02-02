@@ -27,24 +27,17 @@ if (navigator.getVRDisplays) {
   document.body.appendChild(WEBVR.getButton(effect));
 }
 
-let mountain = new Mountain(7500, 7500, 256, 256);
+let mountain = new Mountain(7500, 7500, 325, 325);
 scene.add(mountain.mesh);
 
-let sGeometry = new THREE.SphereGeometry( 10, 32, 32 );
-let sMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-let sMesh = new THREE.Mesh(sGeometry, sMaterial);
-scene.add(sMesh);
-
-sMesh.position.z = -500;
-sMesh.position.y = 2000;
+let firework = new Firework(0, 2000, -500, [0, 0, 5], 0xffffff, 700, scene);
 
 camera.position.z = 700;
-camera.position.y = -0;
 camera.rotation.x = 1.4;
 
 let animate = () => {
   effect.requestAnimationFrame(animate);
-  sMesh.position.z +=5;
+  firework.move();
   effect.render(scene, camera);
 }
 
