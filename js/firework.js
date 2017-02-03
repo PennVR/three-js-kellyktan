@@ -48,8 +48,8 @@ class Firework {
   get particleVels () { return this._particleVels }
   set particleVels (particleVels) { this.particleVels = particleVels }
 
-  // get particleTrail () { return this._particleTrail }
-  // set particleTrail (particleTrail) { this.particleTrail = particleTrail }
+  get particleI () { return this._particleI }
+  set particleI (particleI) { this.particleI = particleI }
 
   move () {
     if (!this._hasExploded) {
@@ -73,50 +73,46 @@ class Firework {
 
   moveParticles () {
     for (let i = 0; i < this._particleNum; i++) {
-
-      let trailGeom = new THREE.Geometry();
-      let trailMat = new THREE.LineBasicMaterial({ color: this._color });
-      trailGeom.vertices.push(new THREE.Vector3(
-        this._particleMeshes[i].position.x,
-        this._particleMeshes[i].position.y,
-        this._particleMeshes[i].position.z));
-
-      this._particleMeshes[i].position.x += this._particleVels[i][0];
-      this._particleMeshes[i].position.y += this._particleVels[i][1];
-      this._particleMeshes[i].position.z += this._particleVels[i][2];
-
-      trailGeom.vertices.push(new THREE.Vector3(
-        this._particleMeshes[i].position.x,
-        this._particleMeshes[i].position.y,
-        this._particleMeshes[i].position.z));
-      let line = new THREE.Line(trailGeom, trailMat);
-      this._scene.add(line);
+      let prevI =
+        (this._particleI + this._particleNum - 1) % this._particleNum;
+      this._particleMeshes[i][this._particleI].position.x =
+          this._particleMeshes[i][prevI].position.x + this._particleVels[i][0];
+      this._particleMeshes[i][this._particleI].position.y =
+          this._particleMeshes[i][prevI].position.y + this._particleVels[i][1];
+      this._particleMeshes[i][this._particleI].position.z =
+          this._particleMeshes[i][prevI].position.z + this._particleVels[i][2];
 
       this._particleVels[i][2] -= this._gravity;
     }
+    this._particleI = (this._particleI + 1) % this._particleNum;
   }
 
   createParticles () {
     this._particleMeshes = new Array(this._particleNum);
     this._particleVels = new Array(this._particleNum);
-    //this._particleTrail = new Array(this._particleNum);
+    this._particleI = 0;
     for (let i = 0; i < this._particleNum; i++) {
 
-      let geometry = new THREE.SphereGeometry( 10, 32, 32 );
-      let material = new THREE.MeshBasicMaterial( { color: this._color } );
-      this._particleMeshes[i] = new THREE.Mesh(geometry, material);
-      this._particleMeshes[i].position.x = this._rocketMesh.position.x;
-      this._particleMeshes[i].position.y = this._rocketMesh.position.y;
-      this._particleMeshes[i].position.z = this._rocketMesh.position.z;
-      this._scene.add(this._particleMeshes[i]);
+      this._particleMeshes[i] = new Array(this._particleNum);
+      for (let j = 0; j < this._particleNum; j++) {
+        let geometry = new THREE.SphereGeometry( 10, 32, 32 );
+        let material = new THREE.MeshBasicMaterial( { color: this._color } );
+        let mesh = new THREE.Mesh(geometry, material);
+        mesh.position.x = this._rocketMesh.position.x;
+        mesh.position.y = this._rocketMesh.position.y;
+        mesh.position.z = this._rocketMesh.position.z;
+        this._scene.add(mesh);
 
-      let theta = 2 * Math.PI / this._particleNum * i;
-      let velMag = 5;
-      let vels = new Array(3);
-      vels[0] = Math.sin(theta) * velMag;
-      vels[1] = 0;
-      vels[2] = Math.cos(theta) * velMag;
-      this._particleVels[i] = vels;
+        this._particleMeshes[i][j] = mesh;
+
+        let theta = 2 * Math.PI / this._particleNum * i;
+        let velMag = 5;
+        let vels = new Array(3);
+        vels[0] = Math.sin(theta) * velMag;
+        vels[1] = 0;
+        vels[2] = Math.cos(theta) * velMag;
+        this._particleVels[i] = vels;
+      }
     }
   }
 
