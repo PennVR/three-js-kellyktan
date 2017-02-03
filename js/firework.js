@@ -5,7 +5,8 @@ class Firework {
     this._vel = vel;
     this._hasExploded = false;
     this._scene = scene;
-    this._particleNum = 20;
+    this._particleNumStream = 20;
+    this._particleNum = 45;
     this._gravity = .25;
 
     let geometry = new THREE.SphereGeometry( 10, 32, 32 );
@@ -39,11 +40,16 @@ class Firework {
   get rocketMesh () { return this._rocketMesh }
   set rocketMesh (rocketMesh) { this.rocketMesh = rocketMesh }
 
+  get particleNumStream () { return this._particleNumStream }
+  set particleNumStream (particleNumStream) {
+      this.particleNumStream = particleNumStream }
+
   get particleNum () { return this._particleNum }
   set particleNum (particleNum) { this.particleNum = particleNum }
 
-  get particleMeshes () { return this._particleMeshes }
-  set particleMeshes (particleMeshes) { this.particleMeshes = particleMeshes }
+  get particleStreams () { return this._particleStreams }
+  set particleStreams (particleStreams) {
+      this.particleStreams = particleStreams }
 
   get particleVels () { return this._particleVels }
   set particleVels (particleVels) { this.particleVels = particleVels }
@@ -72,47 +78,53 @@ class Firework {
   }
 
   moveParticles () {
-    for (let i = 0; i < this._particleNum; i++) {
+    for (let i = 0; i < this._particleNumStream; i++) {
       let prevI =
         (this._particleI + this._particleNum - 1) % this._particleNum;
-      this._particleMeshes[i][this._particleI].position.x =
-          this._particleMeshes[i][prevI].position.x + this._particleVels[i][0];
-      this._particleMeshes[i][this._particleI].position.y =
-          this._particleMeshes[i][prevI].position.y + this._particleVels[i][1];
-      this._particleMeshes[i][this._particleI].position.z =
-          this._particleMeshes[i][prevI].position.z + this._particleVels[i][2];
+      this._particleStreams[i].geometry.vertices[this._particleI].x =
+          this._particleStreams[i].geometry.vertices[prevI].x
+          + this._particleVels[i][0];
+      this._particleStreams[i].geometry.vertices[this._particleI].y =
+          this._particleStreams[i].geometry.vertices[prevI].y
+          + this._particleVels[i][1];
+      this._particleStreams[i].geometry.vertices[this._particleI].z =
+          this._particleStreams[i].geometry.vertices[prevI].z
+          + this._particleVels[i][2];
 
+      this._particleStreams[i].geometry.verticesNeedUpdate = true;
       this._particleVels[i][2] -= this._gravity;
     }
     this._particleI = (this._particleI + 1) % this._particleNum;
   }
 
   createParticles () {
-    this._particleMeshes = new Array(this._particleNum);
+    this._particleStreams = new Array(this._particleNumStream);
     this._particleVels = new Array(this._particleNum);
     this._particleI = 0;
-    for (let i = 0; i < this._particleNum; i++) {
-
-      this._particleMeshes[i] = new Array(this._particleNum);
+    let material = new THREE.PointsMaterial({
+          color: this._color,
+          size: 20
+        });
+    for (let i = 0; i < this._particleNumStream; i++) {
+      let geometry = new THREE.Geometry();
       for (let j = 0; j < this._particleNum; j++) {
-        let geometry = new THREE.SphereGeometry( 10, 32, 32 );
-        let material = new THREE.MeshBasicMaterial( { color: this._color } );
-        let mesh = new THREE.Mesh(geometry, material);
-        mesh.position.x = this._rocketMesh.position.x;
-        mesh.position.y = this._rocketMesh.position.y;
-        mesh.position.z = this._rocketMesh.position.z;
-        this._scene.add(mesh);
-
-        this._particleMeshes[i][j] = mesh;
-
-        let theta = 2 * Math.PI / this._particleNum * i;
-        let velMag = 5;
-        let vels = new Array(3);
-        vels[0] = Math.sin(theta) * velMag;
-        vels[1] = 0;
-        vels[2] = Math.cos(theta) * velMag;
-        this._particleVels[i] = vels;
+        let x = this._rocketMesh.position.x;
+        let y = this._rocketMesh.position.y;
+        let z = this._rocketMesh.position.z;
+        let particle = new THREE.Vector3(x, y, z);
+        geometry.vertices.push(particle);
       }
+      this._particleStreams[i] = new THREE.Points(geometry, material);
+      this._particleStreams[i].sortParticles = true;
+      scene.add(this._particleStreams[i]);
+
+      let theta = 2 * Math.PI / this._particleNumStream * i;
+      let velMag = 7;
+      let vels = new Array(3);
+      vels[0] = Math.sin(theta) * velMag;
+      vels[1] = 0;
+      vels[2] = Math.cos(theta) * velMag;
+      this._particleVels[i] = vels;
     }
   }
 
