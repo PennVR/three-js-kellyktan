@@ -119,10 +119,13 @@ class Firework {
       scene.add(this._particleStreams[i]);
 
       let theta = 2 * Math.PI / this._particleNumStream * i;
+      let smolTheta =
+          Math.atan2(this._rocketMesh.position.y, this._rocketMesh.position.x);
       let velMag = 7;
       let vels = new Array(3);
-      vels[0] = Math.sin(theta) * velMag;
-      vels[1] = 0;
+      let horizVel = Math.sin(theta) * velMag;
+      vels[0] = Math.sin(smolTheta) * horizVel;
+      vels[1] = -Math.cos(smolTheta) * horizVel;
       vels[2] = Math.cos(theta) * velMag;
       this._particleVels[i] = vels;
     }

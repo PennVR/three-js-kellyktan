@@ -31,8 +31,8 @@ let mountain = new Mountain(7500, 7500, 325, 325);
 scene.add(mountain.mesh);
 
 let firework = new Firework(0, 2000, -300, [0, 0, 30], 0xffffff, 1500, scene);
-let firework2 = new Firework(1000, 2000, -500, [0, 0, 30], 0x4286f4, 1300, scene);
-let firework3 = new Firework(-1000, 2000, -500, [0, 0, 30], 0xf4424e, 1300, scene);
+let firework2 = new Firework(1000, 1500, -500, [0, 0, 30], 0x4286f4, 1300, scene);
+let firework3 = new Firework(-1000, 1500, -500, [0, 0, 30], 0xf4424e, 1300, scene);
 
 camera.position.z = 700;
 camera.rotation.x = 1.4;
