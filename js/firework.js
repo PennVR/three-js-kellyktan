@@ -97,9 +97,27 @@ class Firework {
     this._particleI = (this._particleI + 1) % this._particleNum;
   }
 
+  isVisible () {
+    let isVisible = false;
+    for (let i = 0; i < this._particleNumStream; i++) {
+      for (let j = 0; j < this._particleNum; j++) {
+        if (this._particleStreams[i].geometry.vertices[j].z > -500) {
+          isVisible = true;
+        }
+      }
+    }
+    return isVisible;
+  }
+
+  removeParticles () {
+    for (let i = 0; i < this._particleStreams; i++) {
+      scene.remove(this._particleStreams[i]);
+    }
+  }
+
   createParticles () {
     this._particleStreams = new Array(this._particleNumStream);
-    this._particleVels = new Array(this._particleNum);
+    this._particleVels = new Array(this._particleNumStream);
     this._particleI = 0;
     let material = new THREE.PointsMaterial({
           color: this._color,
