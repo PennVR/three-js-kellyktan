@@ -6,6 +6,7 @@ class Firework {
     this._hasExploded = false;
     this._scene = scene;
     this._particleNum = 20;
+    this._gravity = .25;
 
     let geometry = new THREE.SphereGeometry( 10, 32, 32 );
     let material = new THREE.MeshBasicMaterial( { color: this._color } );
@@ -28,6 +29,9 @@ class Firework {
 
   get vel () { return this._vel }
   set vel (vel) { this.vel = vel }
+
+  get gravity () { return this._gravity }
+  set gravity (gravity) { this.gravity = gravity }
 
   get hasExploded () { return this._hasExploded }
   set hasExploded (hasExploded) { this.hasExploded = hasExploded }
@@ -56,7 +60,7 @@ class Firework {
     this._rocketMesh.position.x += this._vel[0];
     this._rocketMesh.position.y += this._vel[1];
     this._rocketMesh.position.z += this._vel[2];
-    this._vel[2] -= .1;
+    this._vel[2] -= this._gravity;
     if (this._rocketMesh.position.z >= this._zExplode) {
       this.createParticles();
       this._scene.remove(this._rocketMesh);
@@ -70,7 +74,7 @@ class Firework {
       this._particleMeshes[i].position.y += this._particleVels[i][1];
       this._particleMeshes[i].position.z += this._particleVels[i][2];
 
-      this._particleVels[i][2] -= .1;
+      this._particleVels[i][2] -= this._gravity;
     }
   }
 
