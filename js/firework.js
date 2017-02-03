@@ -5,6 +5,7 @@ class Firework {
     this._vel = vel;
     this._hasExploded = false;
     this._scene = scene;
+    this._particleNum = 20;
 
     let geometry = new THREE.SphereGeometry( 10, 32, 32 );
     let material = new THREE.MeshBasicMaterial( { color: this._color } );
@@ -34,8 +35,14 @@ class Firework {
   get rocketMesh () { return this._rocketMesh }
   set rocketMesh (rocketMesh) { this.rocketMesh = rocketMesh }
 
+  get particleNum () { return this._particleNum }
+  set particleNum (particleNum) { this.particleNum = particleNum }
+
   get particleMeshes () { return this._particleMeshes }
   set particleMeshes (particleMeshes) { this.particleMeshes = particleMeshes }
+
+  get particleVels () { return this._particleVels }
+  set particleVels (particleVels) { this.particleVels = particleVels }
 
   move () {
     if (!this._hasExploded) {
@@ -49,25 +56,29 @@ class Firework {
     this._rocketMesh.position.x += this._vel[0];
     this._rocketMesh.position.y += this._vel[1];
     this._rocketMesh.position.z += this._vel[2];
+    this._vel[2] -= .1;
     if (this._rocketMesh.position.z >= this._zExplode) {
-      this._scene.remove(this._rocketMesh);
       this.createParticles();
+      this._scene.remove(this._rocketMesh);
       this._hasExploded = true;
     }
   }
 
   moveParticles () {
-    let velMag = 5;
-    for (let i = 0; i < 10; i++) {
-      let theta = 2 * Math.PI / 10 * i;
-      this._particleMeshes[i].position.x += Math.sin(theta) * velMag;
-      this._particleMeshes[i].position.z += Math.cos(theta) * velMag;
+    for (let i = 0; i < this._particleNum; i++) {
+      this._particleMeshes[i].position.x += this._particleVels[i][0];
+      this._particleMeshes[i].position.y += this._particleVels[i][1];
+      this._particleMeshes[i].position.z += this._particleVels[i][2];
+
+      this._particleVels[i][2] -= .1;
     }
   }
 
   createParticles () {
-    this._particleMeshes = new Array(10);
-    for (let i = 0; i < 10; i++) {
+    this._particleMeshes = new Array(this._particleNum);
+    this._particleVels = new Array(this._particleNum);
+    for (let i = 0; i < this._particleNum; i++) {
+
       let geometry = new THREE.SphereGeometry( 10, 32, 32 );
       let material = new THREE.MeshBasicMaterial( { color: this._color } );
       this._particleMeshes[i] = new THREE.Mesh(geometry, material);
@@ -75,6 +86,14 @@ class Firework {
       this._particleMeshes[i].position.y = this._rocketMesh.position.y;
       this._particleMeshes[i].position.z = this._rocketMesh.position.z;
       this._scene.add(this._particleMeshes[i]);
+
+      let theta = 2 * Math.PI / this._particleNum * i;
+      let velMag = 5;
+      let vels = new Array(3);
+      vels[0] = Math.sin(theta) * velMag;
+      vels[1] = 0;
+      vels[2] = Math.cos(theta) * velMag;
+      this._particleVels[i] = vels;
     }
   }
 

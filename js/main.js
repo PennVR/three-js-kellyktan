@@ -30,7 +30,7 @@ if (navigator.getVRDisplays) {
 let mountain = new Mountain(7500, 7500, 325, 325);
 scene.add(mountain.mesh);
 
-let firework = new Firework(0, 2000, -500, [0, 0, 5], 0xffffff, 700, scene);
+let firework = new Firework(0, 2000, -500, [0, 0, 50], 0xffffff, 1300, scene);
 
 camera.position.z = 700;
 camera.rotation.x = 1.4;
