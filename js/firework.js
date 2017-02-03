@@ -48,6 +48,9 @@ class Firework {
   get particleVels () { return this._particleVels }
   set particleVels (particleVels) { this.particleVels = particleVels }
 
+  // get particleTrail () { return this._particleTrail }
+  // set particleTrail (particleTrail) { this.particleTrail = particleTrail }
+
   move () {
     if (!this._hasExploded) {
       this.moveRocket();
@@ -70,9 +73,24 @@ class Firework {
 
   moveParticles () {
     for (let i = 0; i < this._particleNum; i++) {
+
+      let trailGeom = new THREE.Geometry();
+      let trailMat = new THREE.LineBasicMaterial({ color: this._color });
+      trailGeom.vertices.push(new THREE.Vector3(
+        this._particleMeshes[i].position.x,
+        this._particleMeshes[i].position.y,
+        this._particleMeshes[i].position.z));
+
       this._particleMeshes[i].position.x += this._particleVels[i][0];
       this._particleMeshes[i].position.y += this._particleVels[i][1];
       this._particleMeshes[i].position.z += this._particleVels[i][2];
+
+      trailGeom.vertices.push(new THREE.Vector3(
+        this._particleMeshes[i].position.x,
+        this._particleMeshes[i].position.y,
+        this._particleMeshes[i].position.z));
+      let line = new THREE.Line(trailGeom, trailMat);
+      this._scene.add(line);
 
       this._particleVels[i][2] -= this._gravity;
     }
@@ -81,6 +99,7 @@ class Firework {
   createParticles () {
     this._particleMeshes = new Array(this._particleNum);
     this._particleVels = new Array(this._particleNum);
+    //this._particleTrail = new Array(this._particleNum);
     for (let i = 0; i < this._particleNum; i++) {
 
       let geometry = new THREE.SphereGeometry( 10, 32, 32 );
