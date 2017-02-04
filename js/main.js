@@ -30,9 +30,20 @@ if (navigator.getVRDisplays) {
 let mountain = new Mountain(7500, 7500, 325, 325);
 scene.add(mountain.mesh);
 
-let fireworks = [new Firework(0, 2000, -300, [0, 0, 30], 0xffffff, 1500, scene),
-    new Firework(1000, 1500, -500, [0, 0, 30], 0x4286f4, 1300, scene),
-    new Firework(-1000, 1500, -500, [0, 0, 30], 0xf4424e, 1300, scene)];
+let fireworkColors = [0xffffff, 0xff2b2b, 0xff8421, 0xffe41e, 0x65ff1e,
+    0x3fffd5, 0x3fd5ff, 0x9028ff, 0xff28d7];
+
+let generateRandomFirework = () => {
+  let distance = Math.floor((Math.random() * 1750) + 2000);
+  let direction = Math.random() * 2 * Math.PI;
+  let x = Math.sin(direction) * distance;
+  let y = Math.cos(direction) * distance;
+  let z = Math.floor((Math.random() * -400) - 200);
+  let color = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+  return new Firework(x, y, z, [0, 0, 30], color, scene);
+}
+
+let fireworks = [];
 
 camera.position.z = 700;
 camera.rotation.x = 1.4;
@@ -40,20 +51,19 @@ camera.rotation.x = 1.4;
 let animate = () => {
   effect.requestAnimationFrame(animate);
 
+  let newFireworks = [];
+  if (Math.random() < 0.02) {
+    newFireworks.push(generateRandomFirework());
+  }
   for (let i = 0; i < fireworks.length; i++) {
     if (!fireworks[i].hasExploded || fireworks[i].isVisible()) {
       fireworks[i].move();
+      newFireworks.push(fireworks[i]);
     } else {
       fireworks[i].removeParticles();
-      if (i == 0) {
-        fireworks[i] = new Firework(0, 2000, -300, [0, 0, 30], 0xffffff, 1500, scene);
-      } else if (i == 1) {
-        fireworks[i] = new Firework(1000, 1500, -500, [0, 0, 30], 0x4286f4, 1300, scene);
-      } else {
-        fireworks[i] = new Firework(-1000, 1500, -500, [0, 0, 30], 0xf4424e, 1300, scene);
-      }
     }
   }
+  fireworks = newFireworks;
   effect.render(scene, camera);
 }
 

@@ -1,6 +1,5 @@
 class Firework {
-  constructor (x, y, z, vel, color, zExplode, scene) {
-    this._zExplode = zExplode;
+  constructor (x, y, z, vel, color, scene) {
     this._color = color;
     this._vel = vel;
     this._hasExploded = false;
@@ -21,9 +20,6 @@ class Firework {
 
   get scene () { return this._scene }
   set scene (scene) { this.scene = scene }
-
-  get zExplode () { return this._zExplode }
-  set zExplode (zExplode) { this.zExplode = zExplode }
 
   get color () { return this._color }
   set color (color) { this.color = color }
@@ -66,14 +62,15 @@ class Firework {
   }
 
   moveRocket () {
-    this._rocketMesh.position.x += this._vel[0];
-    this._rocketMesh.position.y += this._vel[1];
-    this._rocketMesh.position.z += this._vel[2];
-    this._vel[2] -= this._gravity;
-    if (this._rocketMesh.position.z >= this._zExplode) {
+    if (this._vel[2] <= 0) {
       this.createParticles();
       this._scene.remove(this._rocketMesh);
       this._hasExploded = true;
+    } else {
+      this._rocketMesh.position.x += this._vel[0];
+      this._rocketMesh.position.y += this._vel[1];
+      this._rocketMesh.position.z += this._vel[2];
+      this._vel[2] -= this._gravity;
     }
   }
 
@@ -119,9 +116,13 @@ class Firework {
     this._particleStreams = new Array(this._particleNumStream);
     this._particleVels = new Array(this._particleNumStream);
     this._particleI = 0;
+    let loader = new THREE.TextureLoader();
     let material = new THREE.PointsMaterial({
           color: this._color,
-          size: 20
+          size: 30,
+          map: loader.load("images/particle.png"),
+          blending: THREE.AdditiveBlending,
+          transparent: true
         });
     for (let i = 0; i < this._particleNumStream; i++) {
       let geometry = new THREE.Geometry();
