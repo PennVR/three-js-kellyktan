@@ -12,13 +12,16 @@ class Mountain {
         this._width, this._height, this._widthSeg, this._heightSeg);
     this._seed = Math.floor(Math.random() * 200);
 
+    let n = new Noise(-widthSeg/2,widthSeg/2,-heightSeg/2,heightSeg/2)
+
     for (let i = 0; i < this._geometry.vertices.length; i++) {
       let dist = Math.sqrt(
           this._geometry.vertices[i].x*this._geometry.vertices[i].x
           + this._geometry.vertices[i].y*this._geometry.vertices[i].y);
-      let h = noise(this._geometry.vertices[i].x / widthSeg,
-          this._geometry.vertices[i].y / heightSeg,
-          this._seed) * (dist / 6.5);
+      let h = n.noise(
+          (this._geometry.vertices[i].x + (width / 2.0))/width * widthSeg / 2.0,
+          (this._geometry.vertices[i].y + (height / 2.0))/height * heightSeg / 2.0,
+          this._seed) * (dist / 1.5);
       this._geometry.vertices[i].z = h;
 
       let color = new THREE.Color(0xffffff);
