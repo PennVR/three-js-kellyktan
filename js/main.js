@@ -15,16 +15,20 @@ document.body.appendChild(renderer.domElement);
 let controls = new THREE.VRControls(camera);
 let effect = new THREE.VREffect(renderer);
 
-if (navigator.getVRDisplays) {
+if ( WEBVR.isAvailable() === false ) {
+  document.body.appendChild( WEBVR.getMessage() );
+}
+
+if ( navigator.getVRDisplays ) {
   navigator.getVRDisplays()
-      .then(function(displays) {
-          effect.setVRDisplay( displays[ 0 ] );
-          controls.setVRDisplay( displays[ 0 ] );
-      })
-      .catch(function() {
-          // no displays
-      });
-  document.body.appendChild(WEBVR.getButton(effect));
+    .then( function ( displays ) {
+      effect.setVRDisplay( displays[ 0 ] );
+      controls.setVRDisplay( displays[ 0 ] );
+    } )
+    .catch( function () {
+      // no displays
+    } );
+  document.body.appendChild( WEBVR.getButton( effect ) );
 }
 
 let mountain = new Mountain(7500, 7500, 24, 24);
@@ -61,8 +65,11 @@ let animate = () => {
     }
   }
   fireworks = newFireworks;
+
+  controls.update();
   effect.render(scene, camera);
 }
 
-controls.update();
 animate();
+
+
