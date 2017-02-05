@@ -15,9 +15,9 @@ document.body.appendChild(renderer.domElement);
 let controls = new THREE.VRControls(camera);
 let effect = new THREE.VREffect(renderer);
 
-if ( WEBVR.isAvailable() === false ) {
-  document.body.appendChild( WEBVR.getMessage() );
-}
+// if ( WEBVR.isAvailable() === false ) {
+//   document.body.appendChild( WEBVR.getMessage() );
+// }
 
 if (navigator.getVRDisplays) {
   navigator.getVRDisplays()
@@ -32,7 +32,7 @@ if (navigator.getVRDisplays) {
 }
 
 let mountain = new Mountain(7500, 7500, 24, 24);
-scene.add(mountain.mesh);
+//scene.add(mountain.mesh);
 
 let fireworkColors = [0xffffff, 0xff2b2b, 0xff8421, 0xffe41e, 0x65ff1e,
     0x3fffd5, 0x3fd5ff, 0x9028ff, 0xff28d7];
@@ -49,8 +49,8 @@ let generateRandomFirework = () => {
 
 let fireworks = [];
 
-// camera.position.y = 700;
-camera.rotation.set(-Math.PI/2, Math.PI, 0);
+//camera.position.y = 700;
+//camera.rotation.x = 1.4;
 
 let animate = () => {
   effect.requestAnimationFrame(animate);
