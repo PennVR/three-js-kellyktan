@@ -107,7 +107,7 @@ class Firework {
   }
 
   removeParticles () {
-    for (let i = 0; i < this._particleStreams; i++) {
+    for (let i = 0; i < this._particleNumStreams; i++) {
       scene.remove(this._particleStreams[i]);
     }
   }
@@ -139,7 +139,7 @@ class Firework {
 
       let theta = 2 * Math.PI / this._particleNumStream * i;
       let smolTheta =
-          Math.atan2(this._rocketMesh.position.y, this._rocketMesh.position.x);
+          Math.atan2(this._rocketMesh.position.z, this._rocketMesh.position.x);
       let velMag = 7;
       let vels = new Array(3);
       let horizVel = Math.sin(theta) * velMag;
