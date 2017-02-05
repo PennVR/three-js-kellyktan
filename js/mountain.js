@@ -28,7 +28,7 @@ class Mountain {
       color.r = Math.max(0, Math.min (255, 100 + h / 3)) / 255;
       color.g = 72 / 255;
       color.b = 26 / 255;
-      this._mesh.colors[i] = color;
+      this._geometry.colors[i] = color;
     }
 
     let faceIndices = ['a','b','c','d'];
@@ -41,7 +41,7 @@ class Mountain {
       }
     }
     this._mesh = new THREE.Mesh(this._geometry, this._material);
-    this._geometry.rotation.x = -Math.PI/2;
+    this._mesh.rotation.x = -Math.PI/2;
   }
 
   get width () { return this._width }
