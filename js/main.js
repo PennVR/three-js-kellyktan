@@ -19,16 +19,16 @@ if ( WEBVR.isAvailable() === false ) {
   document.body.appendChild( WEBVR.getMessage() );
 }
 
-if ( navigator.getVRDisplays ) {
+if (navigator.getVRDisplays) {
   navigator.getVRDisplays()
-    .then( function ( displays ) {
-      effect.setVRDisplay( displays[ 0 ] );
-      controls.setVRDisplay( displays[ 0 ] );
-    } )
-    .catch( function () {
-      // no displays
-    } );
-  document.body.appendChild( WEBVR.getButton( effect ) );
+      .then(function(displays) {
+          effect.setVRDisplay( displays[ 0 ] );
+          controls.setVRDisplay( displays[ 0 ] );
+      })
+      .catch(function() {
+          // no displays
+      });
+  document.body.appendChild(WEBVR.getButton(effect));
 }
 
 let mountain = new Mountain(7500, 7500, 24, 24);
@@ -48,6 +48,9 @@ let generateRandomFirework = () => {
 }
 
 let fireworks = [];
+
+camera.position.z = 700;
+camera.rotation.x = 1.4;
 
 let animate = () => {
   effect.requestAnimationFrame(animate);
@@ -71,5 +74,3 @@ let animate = () => {
 }
 
 animate();
-
-
