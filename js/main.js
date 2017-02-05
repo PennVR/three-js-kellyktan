@@ -50,8 +50,7 @@ let generateRandomFirework = () => {
 let fireworks = [];
 
 camera.position.y = 700;
-camera.rotation.x = Math.PI;
-camera.lookAt(new THREE.Vector3(0,0,0));
+camera.rotation.z = Math.PI/2;
 
 let animate = () => {
   effect.requestAnimationFrame(animate);
