@@ -33,7 +33,7 @@ if (navigator.getVRDisplays) {
 
 let mountain = new Mountain(7500, 7500, 24, 24);
 mountain.mesh.rotation.z = Math.PI/2;
-mounatin.mesh.scale.y *= -1;
+mountain.mesh.scale.y *= -1;
 scene.add(mountain.mesh);
 
 let fireworkColors = [0xffffff, 0xff2b2b, 0xff8421, 0xffe41e, 0x65ff1e,
