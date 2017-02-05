@@ -28,7 +28,7 @@ class Mountain {
       color.r = Math.max(0, Math.min (255, 100 + h / 3)) / 255;
       color.g = 72 / 255;
       color.b = 26 / 255;
-      this._geometry.colors[i] = color;
+      this._mesh.colors[i] = color;
     }
 
     let faceIndices = ['a','b','c','d'];
