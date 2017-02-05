@@ -42,6 +42,7 @@ class Mountain {
     }
     this._mesh = new THREE.Mesh(this._geometry, this._material);
     this._mesh.rotation.x = -Math.PI/2;
+    this._mesh.position.y = -700;
   }
 
   get width () { return this._width }
