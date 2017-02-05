@@ -70,7 +70,7 @@ class Firework {
       this._rocketMesh.position.x += this._vel[0];
       this._rocketMesh.position.y += this._vel[1];
       this._rocketMesh.position.z += this._vel[2];
-      this._vel[2] -= this._gravity;
+      this._vel[1] -= this._gravity;
     }
   }
 
@@ -89,7 +89,7 @@ class Firework {
           + this._particleVels[i][2];
 
       this._particleStreams[i].geometry.verticesNeedUpdate = true;
-      this._particleVels[i][2] -= this._gravity;
+      this._particleVels[i][1] -= this._gravity;
     }
     this._particleI = (this._particleI + 1) % this._particleNum;
   }
@@ -98,7 +98,7 @@ class Firework {
     let isVisible = false;
     for (let i = 0; i < this._particleNumStream; i++) {
       for (let j = 0; j < this._particleNum; j++) {
-        if (this._particleStreams[i].geometry.vertices[j].z > -500) {
+        if (this._particleStreams[i].geometry.vertices[j].y > -1200) {
           isVisible = true;
         }
       }
@@ -144,8 +144,8 @@ class Firework {
       let vels = new Array(3);
       let horizVel = Math.sin(theta) * velMag;
       vels[0] = Math.sin(smolTheta) * horizVel;
-      vels[1] = -Math.cos(smolTheta) * horizVel;
-      vels[2] = Math.cos(theta) * velMag;
+      vels[1] = Math.cos(theta) * velMag;
+      vels[2] = -Math.cos(smolTheta) * horizVel;
       this._particleVels[i] = vels;
     }
   }
