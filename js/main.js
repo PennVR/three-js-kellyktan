@@ -50,7 +50,7 @@ let generateRandomFirework = () => {
 let fireworks = [];
 
 camera.position.z = 700;
-camera.rotation.x = 1.4;
+//camera.rotation.x = 1.4;
 
 let animate = () => {
   effect.requestAnimationFrame(animate);
