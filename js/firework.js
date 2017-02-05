@@ -62,7 +62,7 @@ class Firework {
   }
 
   moveRocket () {
-    if (this._vel[2] <= 0) {
+    if (this._vel[1] <= 0) {
       this.createParticles();
       this._scene.remove(this._rocketMesh);
       this._hasExploded = true;
