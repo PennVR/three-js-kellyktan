@@ -44,7 +44,7 @@ let generateRandomFirework = () => {
   let y = Math.floor((Math.random() * -400) - 900);
   let z = Math.cos(direction) * distance;
   let color = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
-  return new Firework(x, y, z, [0, 30, 0], color, scene);
+  return new Firework(x, y, z, [0, 40, 0], color, scene);
 }
 
 let fireworks = [];
