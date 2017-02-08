@@ -29,9 +29,9 @@ class Noise {
   set y1 (y1) { this.y1 = y1 }
 
   distance (v1,v2) {
-    let d1 = v1[0]-v2[0];
-    let d2 = v1[1]-v2[1];
-    let d3 = v1[2]-v2[2];
+    let d1 = v2[0]-v1[0];
+    let d2 = v2[1]-v1[1];
+    let d3 = v2[2]-v1[2];
     return [d1,d2,d3]
   }
 
