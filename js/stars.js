@@ -15,13 +15,9 @@ class Stars {
       }
     }
 
-    //let loader = new THREE.TextureLoader();
     let material = new THREE.PointsMaterial({
           color: 0xffffff,
-          size: 30,
-          // map: loader.load("images/particle.png"),
-          // blending: THREE.AdditiveBlending,
-          // transparent: true
+          size: 30
         });
 
     this._mesh = new THREE.Points(geometry, material);
