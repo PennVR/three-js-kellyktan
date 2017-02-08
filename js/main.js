@@ -34,6 +34,9 @@ if (navigator.getVRDisplays) {
 let mountain = new Mountain(10000, 10000, 24, 24);
 scene.add(mountain.mesh);
 
+let stars = new Stars(10000, 3000);
+scene.add(stars.mesh);
+
 let fireworkColors = [0xffffff, 0xff2b2b, 0xff8421, 0xffe41e, 0x65ff1e,
     0x3fffd5, 0x3fd5ff, 0x9028ff, 0xff28d7];
 
@@ -50,7 +53,7 @@ let generateRandomFirework = () => {
 let fireworks = [];
 
 //camera.rotation.x = -Math.PI/2;
-//camera.position.y = 8000;
+//camera.position.y = 20000;
 
 let animate = () => {
   effect.requestAnimationFrame(animate);

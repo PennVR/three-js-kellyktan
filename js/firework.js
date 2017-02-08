@@ -119,7 +119,7 @@ class Firework {
     let loader = new THREE.TextureLoader();
     let material = new THREE.PointsMaterial({
           color: this._color,
-          size: 30,
+          size: 50,
           map: loader.load("images/particle.png"),
           blending: THREE.AdditiveBlending,
           transparent: true
